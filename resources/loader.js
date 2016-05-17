@@ -355,7 +355,8 @@
 
 
 	new Framework('react-v15.0',{title: 'react v15.0.0'});
-	new Framework('react-improvement',{title: 'react improvement'});
+	// new Framework('react-improvement',{title: 'react improvement'});
+	new Framework('vue-v1.0',{title: 'vue v1.0'});
 	// new Framework('imba-0.14.3',{title: 'imba v0.14.3'});
 	new Framework('imba-dev',{title: 'imba v0.15.0-alpha.1'});
 	new Framework('mithril',{title: 'mithril v0.2.0'});
