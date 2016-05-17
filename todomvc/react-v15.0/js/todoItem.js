@@ -53,7 +53,7 @@ var app = app || {};
 		 */
 		shouldComponentUpdate: function (nextProps, nextState) {
 			// We need to do full rendering here
-			// if(API.FULLRENDER) return true;
+			if(API.FULLRENDER) return true;
 
 			return (
 				nextProps.todo !== this.props.todo ||
@@ -78,7 +78,7 @@ var app = app || {};
 
 		render: function () {
 			return (
-				React.createElement("li", {className: React.addons.classSet({
+				React.createElement("li", {className: classNames({
 					completed: this.props.todo.completed,
 					editing: this.props.editing
 				})},

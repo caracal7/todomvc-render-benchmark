@@ -78,7 +78,7 @@ var app = app || {};
 
 		render: function () {
 			return (
-				React.createElement("li", {className: React.addons.classSet({
+				React.createElement("li", {className: classNames({
 					completed: this.props.todo.completed,
 					editing: this.props.editing
 				})},
