@@ -21,14 +21,18 @@ var app = app || {};
     };
 
     //关闭异步模式，Vue 在检测到数据变化时同步更新 DOM
-    // Vue.config.async = false;
-
+    Vue.config.async = false;
+    Vue.nextTick(function(){
+        console.log("Vue.nextTick",API.RENDERCOUNT);
+    });
 
     var vueApp = new Vue({
 
         // the root element that will be compiled
         el: '.todoapp',
-
+        ready:function(){
+            this.counter();
+        },
         // app initial state
         data: {
             todos: app.Utils.store(),
@@ -70,7 +74,6 @@ var app = app || {};
         // methods that implement data logic.
         // note there's no DOM manipulation here at all.
         methods: {
-
             addTodo: function (text) {
                 var value = text || this.newTodo && this.newTodo.trim();
                 if (!value) {
@@ -78,21 +81,23 @@ var app = app || {};
                 }
                 this.todos.push({ title: value, completed: false });
                 this.newTodo = '';
-                API.RENDERCOUNT ++;
-                this.rendercount ++;
+                this.counter(); //render计数器
+                
+                /*this.$nextTick(function(){
+                    console.log(this.rendercount);
+                });*/
+                
             },
 
             removeTodo: function (todo) {
                 this.todos.$remove(todo);
-                API.RENDERCOUNT ++;
-                this.rendercount ++;
+                this.counter(); //render计数器
             },
 
             editTodo: function (todo) {
                 this.beforeEditCache = todo.title;
                 this.editedTodo = todo;
-                API.RENDERCOUNT ++;
-                this.rendercount ++;
+                this.counter(); //render计数器
             },
 
             doneEdit: function (todo) {
@@ -103,23 +108,26 @@ var app = app || {};
                 todo.title = todo.title.trim();
                 if (!todo.title) {
                     this.removeTodo(todo);
+                }else{
+                    this.counter(); //render计数器
                 }
             },
 
             cancelEdit: function (todo) {
                 this.editedTodo = null;
                 todo.title = this.beforeEditCache;
+                this.counter(); //render计数器
             },
 
             removeCompleted: function () {
                 this.todos = filters.active(this.todos);
+                this.counter(); //render计数器
             },
             renameTodoAtIndex: function(index,text){
                 var todo = this.todos[index];
                 todo.title = text;
 
-                API.RENDERCOUNT++;
-                this.rendercount ++;
+                this.counter(); //render计数器
 
                 return todo;
             },
@@ -132,23 +140,26 @@ var app = app || {};
                 } else {
                     list.splice(index,0,todo);
                 };
-                API.RENDERCOUNT++;
-                this.rendercount ++;
+                this.counter(); //render计数器
                 return todo;
             },
             removeTodoAtIndex: function(index){
                 var todo = this.todos[index];
                 this.todos.splice(index, 1);
-                API.RENDERCOUNT++;
-                this.rendercount ++;
+                this.counter(); //render计数器
                 return todo;
             },
             toggleTodoAtIndex: function(index){
                 var todo = this.todos[index];
                 todo.completed = !todo.completed;
-                API.RENDERCOUNT++;
-                this.rendercount ++;
+                this.counter(); //render计数器
                 return todo;
+            },
+            counter:function(){
+                if(API.AUTORENDER){
+                    this.rendercount ++;
+                    API.RENDERCOUNT ++;
+                }
             }
         },
 
@@ -168,11 +179,6 @@ var app = app || {};
         }
     });
 
-    /*vueApp.$nextTick(function(){
-        console.log(API.RENDERCOUNT);
-        API.RENDERCOUNT++; //记录render次数；
-    });*/
-
     function render() {
         if(API.FORCE_VUE_RENDER){
             API.RENDERCOUNT ++;
@@ -182,9 +188,6 @@ var app = app || {};
             API.FORCE_VUE_RENDER = false;
         }
     }
-
-    render();
-    API.RENDERCOUNT ++;
 
     app.model = vueApp;
     app.render = render;

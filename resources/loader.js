@@ -14,7 +14,7 @@
 	};
 
 	Manager.chart = function (series){
-		console.log(series);
+		// console.log(series);
 		if (this._chart) {
 			this._chart.addSeries(series);
 			return this._chart;
@@ -195,7 +195,7 @@
 			});
 		};
 
-		console.log(self._suite);
+		// console.log(self._suite);
 		Manager.add(self);
 		self.bind();
 		self;
@@ -222,7 +222,7 @@
 
 		var self = this;
 		self._suite.on('start',function(e) {
-			console.log("start");
+			// console.log("start");
 			document.body.classList.add('running');
 
 			Framework.map(function(ex) {
@@ -235,12 +235,12 @@
 		});
 
 		self._suite.on('reset',function(e) {
-			console.log('suite onReset');
+			// console.log('suite onReset');
 			return;
 		});
 
 		self._suite.on('cycle',function(event) {
-			console.log("cycle!");
+			// console.log("cycle!");
 			Framework.get(event.target.name).setStatus(String(event.target));
 			self.step(self._step + 1);
 			return;
@@ -255,7 +255,7 @@
 	};
 
 	Bench.prototype.run = function (){
-		console.log("run");
+		// console.log("run");
 		var self = this;
 		return Framework.build().then(function() {
 			// @benchmarks.map do |b| b:hz = Math.random * 40000
@@ -305,7 +305,7 @@
 
 	Bench.prototype.present = function (){
 		// create div
-		console.log('present');
+		// console.log('present');
 		var el = div('chart');
 		window.analysis.appendChild(el);
 
@@ -354,13 +354,11 @@
 		});
 	};
 
-
-	// new Framework('react-improvement',{title: 'react improvement'});
 	new Framework('react-v15.0',{title: 'react v15.0.0'});
 	new Framework('vue-v1.0',{title: 'vue v1.0'});
+	// new Framework('mithril',{title: 'mithril v0.2.0'});
 	// new Framework('imba-0.14.3',{title: 'imba v0.14.3'});
 	// new Framework('imba-dev',{title: 'imba v0.15.0-alpha.1'});
-	new Framework('mithril',{title: 'mithril v0.2.0'});
 
 	EVERYTHING = new Bench(
 		{label: 'Bench Everything',
@@ -427,7 +425,7 @@
 
 
 	// full rendering
-	new Bench(
+	/*new Bench(
 		{label: 'Unchanged render',
 		title: 'Unchanged render',
 		step: function() {
@@ -435,7 +433,7 @@
 			api.FORCE_VUE_RENDER = true;
 			return api.render(true);
 		}}
-	);
+	);*/
 
 
 	Manager.suites().map(function(suite) {
@@ -455,7 +453,7 @@
 	window.apps.setAttribute("data-count",Framework.count());
 
 	return Framework.build().then(function(res) {
-		console.log("built",res);
+		// console.log("built",res);
 		return Promise.delay(200).then(function() {
 			return document.getElementsByTagName('button')[0].focus();
 		});

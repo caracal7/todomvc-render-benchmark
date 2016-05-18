@@ -81,6 +81,7 @@ var app = app || {};
 		},
 
 		render: function () {
+			// console.log("render",new Date);
 			API.RENDERCOUNT++; // Mark rendercount
 			var footer;
 			var main;

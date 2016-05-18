@@ -4,7 +4,7 @@
 var app = app || {};
 app.controller = function () {
 	app.appController = this;
-	console.log("create controller");
+	// console.log("create controller");
 	var self = this;
 	// Todo collection
 
