@@ -1,5 +1,6 @@
-
 // Public api for benchmark
+API.FORCE_VUE_RENDER = false;
+
 API.render = function(force){
     app.render(force);
     return API.RENDERCOUNT;
@@ -15,9 +16,7 @@ API.addTodo = function(text) {
 
 // expose interface for renaming todo
 API.renameTodoAtIndex = function(index,text) {
-    var todo = app.model.todos[index];
-    todo.title = text;
-    return todo;
+    return app.model.renameTodoAtIndex(index,text);
 }
 
 API.getTodoAtIndex = function (index){
@@ -25,22 +24,11 @@ API.getTodoAtIndex = function (index){
 };
 
 API.insertTodoAtIndex = function (todo,index){
-    var list = app.model.todos;
-    var len  = list.length;
-    var from = list.indexOf(todo);
-
-    if (index >= len) {
-        list.push(todo);
-    } else {
-        list.splice(index,0,todo);
-    };
-    return todo;
+    return app.model.insertTodoAtIndex(todo,index);
 };
 
 API.removeTodoAtIndex = function (index){
-    var todo = API.getTodoAtIndex(index);
-    app.model.todos.splice(index,1);
-    return todo;
+    return app.model.removeTodoAtIndex(index);
 };
 
 API.clearAllTodos = function() {
@@ -48,6 +36,5 @@ API.clearAllTodos = function() {
 }
 
 API.toggleTodoAtIndex = function(index) {
-    var todo = app.model.todos[index];
-    todo.completed = !todo.completed;
+    app.model.toggleTodoAtIndex(index);
 }

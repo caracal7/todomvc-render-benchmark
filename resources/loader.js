@@ -14,6 +14,7 @@
 	};
 
 	Manager.chart = function (series){
+		console.log(series);
 		if (this._chart) {
 			this._chart.addSeries(series);
 			return this._chart;
@@ -254,6 +255,7 @@
 	};
 
 	Bench.prototype.run = function (){
+		console.log("run");
 		var self = this;
 		return Framework.build().then(function() {
 			// @benchmarks.map do |b| b:hz = Math.random * 40000
@@ -311,7 +313,6 @@
 		var sorted = this._benchmarks.slice().sort(function(a,b) { return a.hz - b.hz; });
 		var base = sorted[0].hz;
 		var series = this._benchmarks.map(function(b) { return {type: 'bar',borderWidth: 0,name: b.App.title(),data: [b.hz]}; });
-
 		return this._chart = new Highcharts.Chart({
 			chart: {type: 'bar',renderTo: el},
 
@@ -354,11 +355,11 @@
 	};
 
 
-	new Framework('react-v15.0',{title: 'react v15.0.0'});
 	// new Framework('react-improvement',{title: 'react improvement'});
+	new Framework('react-v15.0',{title: 'react v15.0.0'});
 	new Framework('vue-v1.0',{title: 'vue v1.0'});
 	// new Framework('imba-0.14.3',{title: 'imba v0.14.3'});
-	new Framework('imba-dev',{title: 'imba v0.15.0-alpha.1'});
+	// new Framework('imba-dev',{title: 'imba v0.15.0-alpha.1'});
 	new Framework('mithril',{title: 'mithril v0.2.0'});
 
 	EVERYTHING = new Bench(
@@ -429,7 +430,11 @@
 	new Bench(
 		{label: 'Unchanged render',
 		title: 'Unchanged render',
-		step: function() { return this.App.api().render(true); }}
+		step: function() {
+			var api = this.App.api();
+			api.FORCE_VUE_RENDER = true;
+			return api.render(true);
+		}}
 	);
 
 

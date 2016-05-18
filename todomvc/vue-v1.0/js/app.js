@@ -1,5 +1,6 @@
 /*global Vue, todoStorage */
-(function (exports) {
+var app = app || {};
+(function () {
 
     'use strict';
 
@@ -19,24 +20,29 @@
         }
     };
 
-    exports.app = new Vue({
+    //关闭异步模式，Vue 在检测到数据变化时同步更新 DOM
+    // Vue.config.async = false;
+
+
+    var vueApp = new Vue({
 
         // the root element that will be compiled
         el: '.todoapp',
 
         // app initial state
         data: {
-            todos: todoStorage.fetch(),
+            todos: app.Utils.store(),
             newTodo: '',
             editedTodo: null,
-            visibility: 'all'
+            visibility: 'all',
+            rendercount: API.RENDERCOUNT
         },
 
         // watch todos change for localStorage persistence
         watch: {
             todos: {
                 deep: true,
-                handler: todoStorage.save
+                handler: app.Utils.store
             }
         },
 
@@ -65,22 +71,28 @@
         // note there's no DOM manipulation here at all.
         methods: {
 
-            addTodo: function () {
-                var value = this.newTodo && this.newTodo.trim();
+            addTodo: function (text) {
+                var value = text || this.newTodo && this.newTodo.trim();
                 if (!value) {
                     return;
                 }
                 this.todos.push({ title: value, completed: false });
                 this.newTodo = '';
+                API.RENDERCOUNT ++;
+                this.rendercount ++;
             },
 
             removeTodo: function (todo) {
                 this.todos.$remove(todo);
+                API.RENDERCOUNT ++;
+                this.rendercount ++;
             },
 
             editTodo: function (todo) {
                 this.beforeEditCache = todo.title;
                 this.editedTodo = todo;
+                API.RENDERCOUNT ++;
+                this.rendercount ++;
             },
 
             doneEdit: function (todo) {
@@ -101,6 +113,42 @@
 
             removeCompleted: function () {
                 this.todos = filters.active(this.todos);
+            },
+            renameTodoAtIndex: function(index,text){
+                var todo = this.todos[index];
+                todo.title = text;
+
+                API.RENDERCOUNT++;
+                this.rendercount ++;
+
+                return todo;
+            },
+            insertTodoAtIndex: function(todo, index){
+                var list = this.todos;
+                var len  = list.length;
+
+                if (index >= len) {
+                    list.push(todo);
+                } else {
+                    list.splice(index,0,todo);
+                };
+                API.RENDERCOUNT++;
+                this.rendercount ++;
+                return todo;
+            },
+            removeTodoAtIndex: function(index){
+                var todo = this.todos[index];
+                this.todos.splice(index, 1);
+                API.RENDERCOUNT++;
+                this.rendercount ++;
+                return todo;
+            },
+            toggleTodoAtIndex: function(index){
+                var todo = this.todos[index];
+                todo.completed = !todo.completed;
+                API.RENDERCOUNT++;
+                this.rendercount ++;
+                return todo;
             }
         },
 
@@ -120,4 +168,25 @@
         }
     });
 
-})(window);
+    /*vueApp.$nextTick(function(){
+        console.log(API.RENDERCOUNT);
+        API.RENDERCOUNT++; //记录render次数；
+    });*/
+
+    function render() {
+        if(API.FORCE_VUE_RENDER){
+            API.RENDERCOUNT ++;
+            vueApp.rendercount ++;
+            vueApp.$set('tmp_'+API.RENDERCOUNT, 0);
+
+            API.FORCE_VUE_RENDER = false;
+        }
+    }
+
+    render();
+    API.RENDERCOUNT ++;
+
+    app.model = vueApp;
+    app.render = render;
+
+})();

@@ -1,5 +1,7 @@
 
 // Public api for benchmark
+// API.FULLRENDER = false;
+
 API.render = function(force){
 	app.render(force);
 	return API.RENDERCOUNT;
