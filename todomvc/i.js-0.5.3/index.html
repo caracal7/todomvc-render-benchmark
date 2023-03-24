@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-framework="imba">
+	<head>
+		<meta charset="utf-8">
+		<title>i.js 0.5.3 • TodoMVC</title>
+		<link rel="stylesheet" href="../../resources/shared/app.css">
+		<script src="../../resources/shared/api.js"></script>
+	    <script type="module" src="i.core.js"></script>
+	</head>
+	<body>
+		<section id="todoapp" class="todoapp"></section>
+
+    	<i-js container="todoapp">
+			<script type="i/template_new">
+				<div data-reactroot="">
+					<header class="header">
+						<h1>todos 3</h1><input class="new-todo" placeholder="What needs to be done?"></header>
+						<section class="main"><input type="checkbox" class="toggle-all">
+							<ul class="todo-list">
+								<li class="">
+									<div class="view"><input type="checkbox" class="toggle">
+										<label>Todo 1</label>
+										<button class="destroy"></button>
+									</div><input class="edit">
+								</li>
+								<li class="">
+									<div class="view"><input type="checkbox" class="toggle">
+										<label>Todo 2</label>
+										<button class="destroy"></button>
+									</div><input class="edit">
+								</li>
+								<li class="">
+									<div class="view"><input type="checkbox" class="toggle">
+										<label>Todo 3</label>
+										<button class="destroy"></button>
+									</div><input class="edit">
+								</li>
+								<li class="">
+									<div class="view"><input type="checkbox" class="toggle">
+										<label>Todo 4</label>
+										<button class="destroy"></button>
+									</div><input class="edit">
+								</li>
+								<li class="">
+									<div class="view"><input type="checkbox" class="toggle">
+										<label>Todo 5</label>
+										<button class="destroy"></button>
+									</div><input class="edit">
+								</li>
+								<li class="">
+									<div class="view"><input type="checkbox" class="toggle">
+										<label>Todo 6</label>
+										<button class="destroy"></button>
+									</div><input class="edit">
+								</li>
+							</ul>
+						</section>
+
+					<footer class="footer">
+						<span class="todo-count">
+							<strong>6</strong>
+							items left
+						</span>
+						<ul class="filters">
+							<li>
+								<a href="#/" class="selected">All</a>
+							</li>
+							<li>
+								<a href="#/active" class="">Active</a>
+							</li>
+
+							<li>
+								<a href="#/completed" class="">Completed</a>
+							</li>
+						</ul>
+					</footer>
+				</div>
+			</script>
+		</i-js>
+
+		<script src="js/api.js"></script>	
+	</body>
+</html>
